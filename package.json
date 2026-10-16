@@ -1,0 +1,28 @@
+{
+    "name": "pssp",
+    "version": "1.0.0",
+    "description": "RSS feed server for Sony PSP media streaming",
+    "type": "module",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "PSSP_LOG_PLAIN=1 tsx watch src/index.ts",
+        "test": "PSSP_SUBSONIC_URL=http://localhost PSSP_SUBSONIC_USER=test PSSP_SUBSONIC_PASSWORD=test tsx --test src/**.test.ts",
+        "lint": "biome check .",
+        "lint:fix": "biome check --fix ."
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "pino": "^10.4.0",
+        "pino-pretty": "^13.2.0",
+        "subsonic-api": "^3.3.1"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "^2.5.15",
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.0.0",
+        "tsx": "^4.19.2",
+        "typescript": "^5.6.2"
+    }
+}
