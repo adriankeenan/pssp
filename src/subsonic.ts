@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type SubsonicAPI from 'subsonic-api';
-import type { ArtistID3, Child, Playlist, SubsonicBaseResponse } from 'subsonic-api';
+import type { ArtistID3, Child, Playlist } from 'subsonic-api';
 
 export type { ArtistID3, Child, Playlist, SubsonicAPI } from 'subsonic-api';
 
@@ -100,10 +100,6 @@ export function getStreamUrl(api: SubsonicAPI, config: SubsonicConfig, songId: s
         maxBitRate: String(config.transcodeBitrate),
         estimateContentLength: 'true',
     });
-}
-
-export function scrobble(api: SubsonicAPI, songId: string): Promise<SubsonicBaseResponse> {
-    return api.scrobble({ id: songId, submission: true, time: Date.now() });
 }
 
 export async function getCoverArt(

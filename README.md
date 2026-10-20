@@ -87,7 +87,7 @@ ENV vars:
 | `PSSP_SUBSONIC_PASSWORD` | *(required)* | Subsonic password (remains on the server, not sent to PSP client) |
 | `PSSP_SUBSONIC_TRANSCODE_BITRATE` | `256` | Transcode bitrate (kbps) for CBR mp3 stream |
 | `PSSP_PREWARM_SONGS` | `3` | Number of upcoming feed tracks to pre-transcode in the background when a track is streamed (`0` disables) |
-| `PSSP_SCROBBLE` | `1` | Scrobble played tracks to Subsonic immediately on playback (set `0` to disable) |
+| `PSSP_SCROBBLE` | `1` | Scrobble played tracks to Subsonic immediately on playback (`0` disables) |
 | `PSSP_LOG_PLAIN` | `0` | Emit logs as pretty-printed text (request, response, prewarm) instead of JSON when set to `1` |
 
 ## Notes

@@ -14,6 +14,7 @@ import {
 import { buildEntries, buildFeed } from './feed.js';
 import { buildIndex } from './html.js';
 import { logger } from './logger.js';
+import { scrobbleOnce } from './scrobble.js';
 import { fetchTranscodedStream, prewarm, proxyStream } from './stream.js';
 import {
     type ArtistID3,
@@ -30,7 +31,6 @@ import {
     getStarredSongs,
     getStreamUrl,
     type Playlist,
-    scrobble,
 } from './subsonic.js';
 import { getLanIp, stripExtension } from './utils.js';
 
@@ -178,8 +178,8 @@ async function main() {
 
         const id = stripExtension(req.params.songId, 'mp3');
         if (SCROBBLE_ENABLED && req.method !== 'HEAD') {
-            scrobble(api, id)
-                .then(() => logger.info({ songId: id }, 'Scrobbled'))
+            scrobbleOnce(api, id)
+                .then((submitted) => logger.info({ songId: id }, submitted ? 'Scrobbled' : 'Skipped scrobble'))
                 .catch((e) => logger.error({ songId: id, err: e }, 'Scrobble failed'));
         }
         const url = getStreamUrl(api, config, id);
