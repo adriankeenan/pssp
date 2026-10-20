@@ -106,6 +106,9 @@ ENV vars:
   may not be compatible with all subsonic implementations.
 - It is assumed that all artwork is in JPEG format. Newer formats such as webp are not compatible and no conversion
   is applied.
+- Scrobbling, if enabled, scrobbles immediately on playback start, since the requests made by the PSP give no indication
+  of playback position. Scrobbling tracks is debounced for 3 minutes to prevent additional requests triggering
+  scrobbles. This is tracked in memory only!
 
 ## References
 
