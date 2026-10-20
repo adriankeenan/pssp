@@ -17,7 +17,9 @@ const FORWARD_HEADERS = [
 export async function proxyStream(req: ExpressRequest, res: ExpressResponse, upstream: Response): Promise<void> {
     for (const h of FORWARD_HEADERS) {
         const v = upstream.headers.get(h);
-        if (v) res.set(h, v);
+        if (v) {
+            res.set(h, v);
+        }
     }
     res.status(upstream.status);
     if (req.method === 'HEAD') {
@@ -38,7 +40,9 @@ export async function proxyStream(req: ExpressRequest, res: ExpressResponse, ups
     try {
         for (;;) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+                break;
+            }
             res.write(value);
         }
     } catch {
@@ -52,12 +56,16 @@ export async function proxyStream(req: ExpressRequest, res: ExpressResponse, ups
 
 export async function drain(res: Response): Promise<void> {
     const body = res.body;
-    if (!body) return;
+    if (!body) {
+        return;
+    }
     const reader = body.getReader();
     try {
         for (;;) {
             const { done } = await reader.read();
-            if (done) return;
+            if (done) {
+                return;
+            }
         }
     } catch {
         // cold responses declare an estimated content-length that exceeds the real
@@ -87,7 +95,9 @@ const requestStream = (url: string, method: string, range?: string) =>
  */
 export async function fetchTranscodedStream(url: string, call: StreamCall): Promise<Response> {
     const upstream = await requestStream(url, call.method, call.range);
-    if (isTranscodeHot(upstream, call.range)) return upstream;
+    if (isTranscodeHot(upstream, call.range)) {
+        return upstream;
+    }
 
     if (call.method === 'HEAD') {
         await drain(await requestStream(url, 'GET'));
