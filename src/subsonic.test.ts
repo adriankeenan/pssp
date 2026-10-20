@@ -23,7 +23,9 @@ function authOf(url: string): { salt: string; token: string } {
     const params = paramsOf(url);
     const salt = params.get('s');
     const token = params.get('t');
-    if (salt === null || token === null) throw new Error('missing token auth params');
+    if (salt === null || token === null) {
+        throw new Error('missing token auth params');
+    }
     return { salt, token };
 }
 
@@ -48,6 +50,8 @@ test('token is md5 of password joined with the salt', () => {
 
 test('each request generates a fresh salt', () => {
     const salts = new Set<string>();
-    for (let i = 0; i < 20; i++) salts.add(paramsOf(getStreamUrl(api, CONFIG, 'a')).get('s'));
+    for (let i = 0; i < 20; i++) {
+        salts.add(paramsOf(getStreamUrl(api, CONFIG, 'a')).get('s'));
+    }
     assert.equal(salts.size, 20);
 });

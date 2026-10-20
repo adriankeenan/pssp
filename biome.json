@@ -10,7 +10,12 @@
         "lineWidth": 120
     },
     "linter": {
-        "enabled": true
+        "enabled": true,
+        "rules": {
+            "style": {
+                "useBlockStatements": "error"
+            }
+        }
     },
     "javascript": {
         "formatter": {

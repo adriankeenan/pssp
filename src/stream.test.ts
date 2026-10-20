@@ -37,7 +37,9 @@ function stubFetch(script: Script): {
         const call: Call = { url: String(input), init: init ?? {} };
         calls.push(call);
         const producer = script.shift();
-        if (!producer) throw new Error('unexpected extra fetch call');
+        if (!producer) {
+            throw new Error('unexpected extra fetch call');
+        }
         return producer(call);
     };
     return {
@@ -103,8 +105,12 @@ function waitFor(predicate: () => boolean, timeout = 1000): Promise<void> {
     return new Promise((resolve, reject) => {
         const started = Date.now();
         const poll = () => {
-            if (predicate()) return resolve();
-            if (Date.now() - started > timeout) return reject(new Error('timed out waiting for condition'));
+            if (predicate()) {
+                return resolve();
+            }
+            if (Date.now() - started > timeout) {
+                return reject(new Error('timed out waiting for condition'));
+            }
             setTimeout(poll, 5);
         };
         poll();

@@ -110,7 +110,9 @@ export async function getCoverArt(
 ): Promise<{ buf: Buffer; contentType: string } | null> {
     const res = await fetch(getRestUrl(api, 'getCoverArt', { ...authParams(config), id, size: String(size) }));
     const contentType = res.headers.get('content-type') ?? '';
-    if (!res.ok || !contentType.startsWith('image/')) return null;
+    if (!res.ok || !contentType.startsWith('image/')) {
+        return null;
+    }
     const buf = Buffer.from(await res.arrayBuffer());
     return { buf, contentType };
 }

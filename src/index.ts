@@ -9,10 +9,12 @@ import {
     PORT,
     PREWARM_NEXT,
     PUBLIC_URL,
+    SCROBBLE_ENABLED,
 } from './config.js';
 import { buildEntries, buildFeed } from './feed.js';
 import { buildIndex } from './html.js';
 import { logger } from './logger.js';
+import { scrobbleOnce } from './scrobble.js';
 import { fetchTranscodedStream, prewarm, proxyStream } from './stream.js';
 import {
     type ArtistID3,
@@ -175,6 +177,11 @@ async function main() {
         prewarm(api, config, nextSongIds);
 
         const id = stripExtension(req.params.songId, 'mp3');
+        if (SCROBBLE_ENABLED && req.method !== 'HEAD') {
+            scrobbleOnce(api, id)
+                .then((submitted) => logger.info({ songId: id }, submitted ? 'Scrobbled' : 'Skipped scrobble'))
+                .catch((e) => logger.error({ songId: id, err: e }, 'Scrobble failed'));
+        }
         const url = getStreamUrl(api, config, id);
         try {
             const upstream = await fetchTranscodedStream(url, {
