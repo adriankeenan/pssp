@@ -9,6 +9,7 @@ import {
     PORT,
     PREWARM_NEXT,
     PUBLIC_URL,
+    SCROBBLE_ENABLED,
 } from './config.js';
 import { buildEntries, buildFeed } from './feed.js';
 import { buildIndex } from './html.js';
@@ -29,6 +30,7 @@ import {
     getStarredSongs,
     getStreamUrl,
     type Playlist,
+    scrobble,
 } from './subsonic.js';
 import { getLanIp, stripExtension } from './utils.js';
 
@@ -175,6 +177,11 @@ async function main() {
         prewarm(api, config, nextSongIds);
 
         const id = stripExtension(req.params.songId, 'mp3');
+        if (SCROBBLE_ENABLED && req.method !== 'HEAD') {
+            scrobble(api, id)
+                .then(() => logger.info({ songId: id }, 'Scrobbled'))
+                .catch((e) => logger.error({ songId: id, err: e }, 'Scrobble failed'));
+        }
         const url = getStreamUrl(api, config, id);
         try {
             const upstream = await fetchTranscodedStream(url, {

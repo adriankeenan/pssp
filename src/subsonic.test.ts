@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { test } from 'node:test';
 import type { SubsonicAPI, SubsonicConfig } from './subsonic.js';
-import { getStreamUrl } from './subsonic.js';
+import { getStreamUrl, scrobble } from './subsonic.js';
 
 const CONFIG = {
     url: 'http://upstream',
@@ -50,4 +50,22 @@ test('each request generates a fresh salt', () => {
     const salts = new Set<string>();
     for (let i = 0; i < 20; i++) salts.add(paramsOf(getStreamUrl(api, CONFIG, 'a')).get('s'));
     assert.equal(salts.size, 20);
+});
+
+test('scrobble submits immediately with submission=true and the current time', async () => {
+    const calls: unknown[] = [];
+    const spy = {
+        scrobble: async (args: unknown) => {
+            calls.push(args);
+            return {};
+        },
+    } as unknown as SubsonicAPI;
+    const before = Date.now();
+    await scrobble(spy, 'a');
+    const after = Date.now();
+    assert.equal(calls.length, 1);
+    const arg = calls[0] as { id: string; submission: boolean; time: number };
+    assert.equal(arg.id, 'a');
+    assert.equal(arg.submission, true);
+    assert.ok(arg.time >= before && arg.time <= after);
 });

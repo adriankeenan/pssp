@@ -24,6 +24,7 @@ export const IMG_SIZE_CHANNEL = 300;
 export const FEED_LENGTH_MAX = 100;
 export const PREWARM_NEXT = Number(process.env.PSSP_PREWARM_SONGS ?? 3);
 export const LOG_PLAIN = process.env.PSSP_LOG_PLAIN === '1';
+export const SCROBBLE_ENABLED = process.env.PSSP_SCROBBLE !== '0';
 
 export const config: SubsonicConfig = {
     url: SUBSONIC_URL,
